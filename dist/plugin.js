@@ -1,4 +1,4 @@
-exports.version = 1
+exports.version = 1.2
 exports.apiRequired = 8.1
 exports.repo = "Hug3O/AdminThemeCustomizer"
 exports.description = "Customize Admin Panel with theme color selector"
@@ -29,12 +29,12 @@ exports.init = api => ({
                         --orange-good-contrast: #ff9900;
                         --orange-button-bg-hover: #16141198;
                         --orange-button-text: #ff9900;
-                        --orange-button-bg:rgb(14 13 11);
+                        --orange-button-bg:rgb(17, 17, 15);
                         --orange-ghost-contrast: rgba(48, 48, 48, 0.36);
                         --orange-faint-contrast: rgba(106, 106, 106, 0.6);
-                        --orange-mild-contrast: rgb(24, 24, 24);
+                        --orange-mild-contrast:rgba(255, 153, 0, 0.09);
                         --orange-comment-contrast: rgba(158, 158, 158, 0.65);
-                        --orange-grid-contrast: rgba(48, 48, 48, 0.7);
+                        --orange-grid-contrast: rgb(48, 48, 48);
                         --orange-focus-color: #ff9900;
                         --orange-text-high-contrast: #ff9900;
                         --orange-success: #0b0a09ab;
@@ -62,7 +62,7 @@ exports.init = api => ({
                         --green-button-bg: #18191100;
                         --green-ghost-contrast: #b6ce002b;
                         --green-faint-contrast: #b6ce007b;
-                        --green-mild-contrast: #b6ce007d;
+                        --green-mild-contrast:rgba(182, 206, 0, 0.24);
                         --green-comment-contrast: #b6ce007a;
                         --green-grid-contrast: #b6ce0055;
                         --green-focus-color: #b6ce00b8;
@@ -157,6 +157,7 @@ exports.init = api => ({
                             border-color: var(--active-grid-contrast) !important;
                         }
                         
+
                         /* ===== 窄屏界面 System integration 按鈕完全隱藏 ===== */
                         @media (max-width: 600px) {
                             /* 針對所有可能的 ID 變化 */
@@ -202,6 +203,7 @@ exports.init = api => ({
                             }
                         }
                         
+
                         /* ===== 開關按鈕修復 ===== */
                         /* 開關軌道 - 未啟用狀態 */
                         body.theme-${themeColor} .MuiSwitch-track {
@@ -518,6 +520,8 @@ exports.init = api => ({
                             border-top: 1px solid var(--active-grid-contrast) !important;
                         }
                         
+
+
                         /* ===== 鏈接 ===== */
                         body.theme-${themeColor} a, 
                         body.theme-${themeColor} .MuiLink-root, 
@@ -699,11 +703,32 @@ exports.init = api => ({
                         body.theme-${themeColor} div[class*="Mui"]:not([class*="Paper"]):not([class*="Card"]):not([class*="Dialog"]) {
                             background: transparent !important;
                         }
-                        
 
                         body.theme-orange .css-1imevbh {
                             box-shadow: none !important;
                         }
+
+.css-1yssiyv .MuiDataGrid-columnHeaders {
+    backdrop-filter: blur(4px);
+    box-shadow: none;
+}
+
+.css-zgbb4g {
+    backdrop-filter: blur(4px);
+    box-shadow: none;
+}
+
+.css-1ut7fhz {
+    backdrop-filter: blur(4px);
+    box-shadow: none;
+}
+svg path[d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2M9.5 16.5v-9l7 4.5z"] {
+                            fill:var(--active-faint-contrast) !important;
+}
+svg path[d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zM19 4h-3.5l-1-1h-5l-1 1H5v2h14z"] {
+                            fill:var(--active-faint-contrast) !important;
+}
+
                     </style>`;
                     
                     // 插入到 head 最後，確保覆蓋原有樣式
