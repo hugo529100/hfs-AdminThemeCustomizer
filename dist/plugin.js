@@ -728,7 +728,9 @@ svg path[d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2M9.
 svg path[d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zM19 4h-3.5l-1-1h-5l-1 1H5v2h14z"] {
                             fill:var(--active-faint-contrast) !important;
 }
-
+.css-1ctp825 .MuiDataGrid-columnHeaders {
+    backdrop-filter: blur(2px);
+}
                     </style>`;
                     
                     // 插入到 head 最後，確保覆蓋原有樣式
