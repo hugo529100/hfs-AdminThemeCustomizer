@@ -1,4 +1,4 @@
-exports.version = 1.2
+exports.version = 1.4
 exports.apiRequired = 8.1
 exports.repo = "Hug3O/AdminThemeCustomizer"
 exports.description = "Customize Admin Panel with theme color selector"
@@ -711,6 +711,10 @@ exports.init = api => ({
 .css-1yssiyv .MuiDataGrid-columnHeaders {
     backdrop-filter: blur(4px);
     box-shadow: none;
+}
+
+.MuiDataGrid-row--borderBottom.css-gvoll6 {
+    backdrop-filter: blur(4px);
 }
 
 .css-zgbb4g {
