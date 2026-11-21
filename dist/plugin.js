@@ -52,25 +52,28 @@ exports.init = api => ({
                     `;
                     
                     // 定義綠色主題變數
+                    // 對照橙色主題的結構修正：強調色（文字／連結／焦點／開關）改用實色綠色，
+                    // 邊框與次要文字沿用橙色主題的中性灰，透明度與橙色主題一致，
+                    // 深色面板改為不透明的深綠黑，避免綠色主題出現「全部發光」與「按鈕隱形」的問題。
                     const greenTheme = `
                         /* 綠色主題變數 */
                         --green-bg: rgb(10, 12, 0);
                         --green-text: #b6ce00;
-                        --green-good-contrast: #b6ce00be;
+                        --green-good-contrast: #b6ce00;
                         --green-button-bg-hover: #b9ce002b;
                         --green-button-text: #b6ce00;
-                        --green-button-bg: #18191100;
-                        --green-ghost-contrast: #b6ce002b;
-                        --green-faint-contrast: #b6ce007b;
-                        --green-mild-contrast:rgba(182, 206, 0, 0.24);
-                        --green-comment-contrast: #b6ce007a;
-                        --green-grid-contrast: #b6ce0055;
-                        --green-focus-color: #b6ce00b8;
+                        --green-button-bg: #181911;
+                        --green-ghost-contrast: rgba(48, 48, 48, 0.36);
+                        --green-faint-contrast: rgba(106, 106, 106, 0.6);
+                        --green-mild-contrast: rgba(182, 206, 0, 0.09);
+                        --green-comment-contrast: rgba(158, 158, 158, 0.65);
+                        --green-grid-contrast: rgb(48, 48, 48);
+                        --green-focus-color: #b6ce00;
                         --green-text-high-contrast: #b6ce00;
                         --green-success: #0b0c09ab;
-                        --green-warning: #43470bab;
+                        --green-warning: #0b0c09ab;
                         --green-link: #b6ce00;
-                        --green-deepprevew: #000000f6;
+                        --green-deepprevew: rgb(9, 11, 3);
                         --green-disabled: rgba(128, 128, 128, 0.3);
                         --green-inactive: rgba(182, 206, 0, 0.3);
                         --green-danger: rgba(128, 128, 128, 0.3);
@@ -704,7 +707,7 @@ exports.init = api => ({
                             background: transparent !important;
                         }
 
-                        body.theme-orange .css-1imevbh {
+                        body.theme-${themeColor} .css-1imevbh {
                             box-shadow: none !important;
                         }
 
