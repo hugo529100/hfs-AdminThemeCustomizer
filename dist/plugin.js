@@ -1,14 +1,14 @@
-exports.version = 1.4
+exports.version = 1.8
 exports.apiRequired = 8.1
-exports.repo = "Hug3O/AdminThemeCustomizer"
+exports.repo = "hugo529100/hfs-AdminThemeCustomizer"
 exports.description = "Customize Admin Panel with theme color selector"
 exports.config = {
     themeColor: {
         type: 'select',
         defaultValue: 'orange',
-        options: { 'Orange Theme': 'orange', 'Green Theme': 'green' },
+        options: { 'Native colors': 'native', 'Orange Theme': 'orange', 'Green Theme': 'green' },
         label: "Theme Color",
-        helperText: "Select the theme color for the Admin Panel",
+        helperText: "Select the theme color for the Admin Panel. Native colors keep the original HFS look.",
         frontend: false
     }
 }
@@ -160,51 +160,6 @@ exports.init = api => ({
                             border-color: var(--active-grid-contrast) !important;
                         }
                         
-
-                        /* ===== 窄屏界面 System integration 按鈕完全隱藏 ===== */
-                        @media (max-width: 600px) {
-                            /* 針對所有可能的 ID 變化 */
-                            button[id^=":r"][id$="c:"]:has(img[alt="Windows icon"]),
-                            button:has(img[alt="Windows icon"]),
-                            button:has(img[title="Windows"]),
-                            button.MuiButton-root:has(span:has(img[alt="Windows icon"])) span:contains("System integration"),
-                            button.MuiButton-root:has(img[alt="Windows icon"]) {
-                                display: none !important;
-                                visibility: hidden !important;
-                                opacity: 0 !important;
-                                width: 0 !important;
-                                height: 0 !important;
-                                padding: 0 !important;
-                                margin: 0 !important;
-                                border: none !important;
-                                overflow: hidden !important;
-                                position: absolute !important;
-                                pointer-events: none !important;
-                            }
-                            
-                            /* 更通用的選擇器 - 匹配任何包含 Windows 圖標的按鈕 */
-                            button img[alt="Windows icon"],
-                            button img[title="Windows"] {
-                                display: none !important;
-                            }
-                            
-                            /* 針對特定的 System integration 文字 */
-                            button.MuiButton-root:has(span:contains("System integration")) {
-                                display: none !important;
-                            }
-                            
-                            /* 備用方案 - 隱藏所有可能包含 System integration 的按鈕 */
-                            button.MuiButton-root .MuiButton-startIcon + span {
-                                display: none !important;
-                            }
-                            
-                            /* 強制隱藏 */
-                            button[id=":r1c:"],
-                            button[id=":r1u:"],
-                            button[id*=":r"][id*="c:"] {
-                                display: none !important;
-                            }
-                        }
                         
 
                         /* ===== 開關按鈕修復 ===== */
@@ -739,12 +694,142 @@ svg path[d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zM19 4h-3.5l-1-1h-5l-1 1H5v2
     backdrop-filter: blur(2px);
 }
                     </style>`;
-                    
+
+                    // 版面修正與原生配色共用，與主題顏色無關
+                    // covers tabs scrolling/compact height, Monitoring chips, and the System integration icon
+                    const layoutFixesCSS = `
+                    <style>
+                        /* ===== 版面修正：頂部標籤頁可在窄屏下橫向拖動 ===== */
+                        /* 讓 MUI 的標籤列可以橫向滾動，右側的標籤不會再被裁掉而無法點擊 */
+                        .MuiTabs-scroller {
+                            overflow-x: auto !important;
+                            overflow-y: hidden !important;
+                            scrollbar-width: none !important;
+                            -ms-overflow-style: none !important;
+                            -webkit-overflow-scrolling: touch;
+                        }
+                        .MuiTabs-scroller::-webkit-scrollbar {
+                            display: none !important;
+                            width: 0 !important;
+                            height: 0 !important;
+                        }
+                        .MuiTabs-scroller > .MuiTabs-list,
+                        .MuiTabs-scroller > .MuiTabs-flexContainer {
+                            min-width: max-content !important;
+                        }
+                        html[data-hfs-route="plugins"] .MuiTabs-scroller,
+                        html[data-hfs-route="logs"] .MuiTabs-scroller,
+                        html[data-hfs-route="options"] .MuiTabs-scroller {
+                            cursor: grab;
+                        }
+
+                        /* ===== 版面修正：plugins / logs / options 標籤列更緊凑 ===== */
+                        html[data-hfs-route="plugins"] .MuiTabs-root,
+                        html[data-hfs-route="logs"] .MuiTabs-root,
+                        html[data-hfs-route="options"] .MuiTabs-root {
+                            min-height: 34px !important;
+                        }
+                        html[data-hfs-route="plugins"] .MuiTab-root,
+                        html[data-hfs-route="logs"] .MuiTab-root,
+                        html[data-hfs-route="options"] .MuiTab-root {
+                            min-height: 34px !important;
+                            height: 34px !important;
+                            padding: 0 14px !important;
+                            font-size: 0.78rem !important;
+                            line-height: 34px !important;
+                        }
+                        html[data-hfs-route="plugins"] .MuiTabs-indicator,
+                        html[data-hfs-route="logs"] .MuiTabs-indicator,
+                        html[data-hfs-route="options"] .MuiTabs-indicator {
+                            height: 2px !important;
+                        }
+
+                        /* 日誌頁：右側的圖標按鈕與標籤列同高，別把整列撐高 */
+                        html[data-hfs-route="logs"] .MuiBox-root:has(> .MuiTabs-root) > .MuiIconButton-root {
+                            padding: 4px !important;
+                        }
+
+                        /* ===== 版面修正：Monitoring 頁面的標籤圓角改為 4px ===== */
+                        html[data-hfs-route="monitoring"] .MuiChip-root {
+                            border-radius: 4px !important;
+                        }
+
+                        /* ===== 版面修正：System integration 按鈕只保留文字 ===== */
+                        button .MuiButton-startIcon:has(img[alt="Windows icon"]),
+                        button .MuiButton-startIcon:has(img[title="Windows"]),
+                        button .MuiButton-icon:has(img[alt="Windows icon"]),
+                        button .MuiButton-icon:has(img[title="Windows"]) {
+                            display: none !important;
+                        }
+                        button img[alt="Windows icon"],
+                        button img[title="Windows"] {
+                            display: none !important;
+                        }
+                    </style>`;
+
+                    // 原生配色不需要任何主題覆蓋，只套用版面修正
+                    const layoutFixesScript = `
+                    <script>
+                    (() => {
+                        'use strict';
+                        const routeOf = () => {
+                            const hash = location.hash.replace(/^#\\/?/, '');
+                            return (hash.split(/[/?#]/)[0] || 'home').toLowerCase();
+                        };
+                        const syncRoute = () => document.documentElement.setAttribute('data-hfs-route', routeOf());
+                        syncRoute();
+                        addEventListener('hashchange', syncRoute);
+
+                        // 桌面滑鼠也能按住標籤列左右拖動；觸控裝置用原生橫向滾動
+                        let drag = null;
+                        let suppressClickUntil = 0;
+                        document.addEventListener('pointerdown', event => {
+                            if (event.pointerType === 'touch' || event.button !== 0) return;
+                            const target = event.target;
+                            const scroller = target instanceof Element ? target.closest('.MuiTabs-scroller') : null;
+                            if (!scroller || scroller.scrollWidth <= scroller.clientWidth + 1) return;
+                            drag = { scroller, startX: event.clientX, startLeft: scroller.scrollLeft, moved: false };
+                        }, true);
+                        document.addEventListener('pointermove', event => {
+                            if (!drag) return;
+                            const dx = event.clientX - drag.startX;
+                            if (!drag.moved) {
+                                if (Math.abs(dx) < 5) return;
+                                drag.moved = true;
+                                drag.scroller.style.cursor = 'grabbing';
+                                document.documentElement.style.userSelect = 'none';
+                            }
+                            drag.scroller.scrollLeft = drag.startLeft - dx;
+                        }, { capture: true, passive: true });
+                        const endDrag = () => {
+                            if (!drag) return;
+                            if (drag.moved) {
+                                suppressClickUntil = Date.now() + 350;
+                                drag.scroller.style.cursor = '';
+                            }
+                            drag = null;
+                            document.documentElement.style.userSelect = '';
+                        };
+                        document.addEventListener('pointerup', endDrag, true);
+                        document.addEventListener('pointercancel', endDrag, true);
+                        addEventListener('blur', endDrag);
+                        document.addEventListener('click', event => {
+                            if (Date.now() >= suppressClickUntil) return;
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }, true);
+                    })();
+                    </script>`;
+
+                    const isNative = themeColor === 'native';
+                    const injection = (isNative ? '' : customThemeCSS) + layoutFixesCSS + layoutFixesScript;
+
                     // 插入到 head 最後，確保覆蓋原有樣式
-                    ctx.body = String(ctx.body).replace('</head>', `${customThemeCSS}</head>`);
-                    
-                    // 添加主題類別到 body
-                    ctx.body = String(ctx.body).replace('<body', `<body class="theme-${themeColor}"`);
+                    ctx.body = String(ctx.body).replace('</head>', `${injection}</head>`);
+
+                    // 原生配色不添加任何主題類別
+                    if (!isNative)
+                        ctx.body = String(ctx.body).replace('<body', `<body class="theme-${themeColor}"`);
                 }
             };
         }
